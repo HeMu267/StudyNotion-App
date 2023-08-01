@@ -174,8 +174,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                     }
                     </div>
                         
-                    {
-                        <div className='flex gap-8 flex-col  relative'>
+                    <div className='flex gap-8 flex-col  relative'>
                             <div className='flex gap-8 overflow-auto h-[75vh] flex-col bg-richblack-700 absolute z-30 w-full'>
                             {
                                 NavbarLinks.map((links,index)=>{
@@ -206,14 +205,9 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                                     })
                                 }
                             </div>
-                        </div>
-                        
-                    }
+                    </div>
                     <AiOutlineClose className='absolute top-[6px] right-[6px]' onClick={()=>{setMenuPos((prev)=>!prev);console.log("menu bar sliding out");console.log(menuPos)}}/>
-                    {
-                        secSlide && 
-                        <AiOutlineArrowLeft className='absolute top-[10px] left-[15px] cursor-pointer' onClick={()=>{setSecSlide((prev)=>!prev);console.log("second slide closing")}}/>
-                    }
+                    <AiOutlineArrowLeft onClick={()=>{setSecSlide((prev)=>!prev);console.log("sec slide moving out")}} className={`absolute top-[10px] left-[15px] ${secSlide?"visible":"invisible"} cursor-pointer`}/>
                 </ul>
             }
             
