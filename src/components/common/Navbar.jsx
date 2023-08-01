@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import logo from '../../assets/Logo/Logo-Full-Light.png'
 import { Link, matchPath } from 'react-router-dom'
 import { NavbarLinks } from '../../data/navbar-links'
@@ -15,13 +15,15 @@ import {AiOutlineArrowLeft} from 'react-icons/ai'
 
 
 
-export const Navbar = () => {
+export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) => {
     const {token}=useSelector((state)=>state.auth);
     const {user}=useSelector((state)=>state.profile);
     const {totalItems}=useSelector((state)=>state.cart);
     const location=useLocation();
     const [subLinks,setSubLinks]=useState([]);
-    const [hamburgerIcons,setHamburgerIcons]=useState(false);
+    const [secSlide,setSecSlide]=useState(false);
+    const menuRef=useRef(null);
+    const hamRef=useRef(null);
     const fetchSubLinks=async()=>{
             try{
                 const result=await apiConnector("GET",categories.CATEGORIES_API);
@@ -34,36 +36,63 @@ export const Navbar = () => {
     }
     const [screenWidth,setScreenWidth]=useState(window.innerWidth);
     const ResHam=()=>{
-        console.log("resizing");
-        if(screenWidth>768)
+        console.log("window is being resized");
+        if(screenWidth>=768)
         {
-            console.log("falsing ham");
+            console.log("Falsing Hamburger icon width>768px");
             setHamburgerIcons(false);
+            setMenuPos(false);
         }
         else{
-            return
+            console.log("hamburger set to true width<768px");
+            setHamburgerIcons(true);
         }
     }
     const updateWidth=()=>{
         setScreenWidth(window.innerWidth);
     }
+    const handleOutsideClick=(event)=>{
+            console.log(event.target);
+            console.log(hamRef.current);
+            console.log(menuRef.current);
+            console.log(menuRef.current.contains(event.target));
+            console.log(event.target.parentNode);
+            if(event.target===menuRef.current || menuRef.current.contains(event.target))
+            {
+                console.log("target was at menu bar");
+                return 
+            }
+            else if(event.target===hamRef.current || hamRef.current.contains(event.target))
+            {
+                console.log("target was at hamburger");
+                return
+            }
+            setMenuPos(false);
+            console.log("menu bar sliding out");
+    }
     useEffect(()=>{
-        setHamburgerIcons(false)
+        setMenuPos(false)
     },[window.location.pathname])
     useEffect(()=>{
         ResHam()
     },[screenWidth])
+
+    useEffect(()=>{
+        document.addEventListener('click',handleOutsideClick);
+        return()=>{
+            document.removeEventListener('click',handleOutsideClick);
+        }
+    },[menuRef,hamRef])
     useEffect(()=>{
         fetchSubLinks();
         window.addEventListener('resize',updateWidth);
-        return()=>{
+        return ()=>{
             window.removeEventListener('resize',updateWidth);
         }
     },[])
     const matchRoute=(route)=>{
         return matchPath({path:route},location.pathname)
     }
-    const [secLinks,setSecLinks]=useState(false);
   return (
     <div className='w-screen border-b-[1px] relative border-richblack-700 py-3 px-2'>
         <div className='w-11/12  flex items-center mx-auto justify-between max-w-maxContent'>
@@ -71,8 +100,7 @@ export const Navbar = () => {
                 <img src={logo} width={160} height={32}></img>
             </Link>
             <nav className="hidden md:block">
-            {
-                    
+            {    
                     <ul className='flex lg:gap-6 gap-4 max-[900px]:gap-2  text-richblack-25'>
                     {
                         NavbarLinks.map((links,index)=>{
@@ -113,8 +141,8 @@ export const Navbar = () => {
             </nav>
             {
                 hamburgerIcons &&
-                <ul className={`flex animate-[slideIn_0.25s_ease] w-[45%] max-[426px]:w-full min-h-screen flex-col absolute z-40 top-0 right-0 bg-richblack-700 pt-8 pb-6 pl-6 pr-6 lg:gap-6 gap-8   text-richblack-25`}>
-                    <div className='flex gap-x-4 items-center'>
+                <ul ref={menuRef} className={`flex w-[45%] max-[426px]:w-full min-h-screen flex-col absolute z-40 top-0 right-0 ${menuPos?"translate-x-0 transition-transform duration-[300] ease-out":"translate-x-[100%] transition-transform duration-[300] ease-in"}  bg-richblack-700 pt-8 pb-6 pl-6 pr-6 lg:gap-6 gap-8   text-richblack-25`}>
+                    <div className='flex gap-x-4 items-center h-[20%]'>
                     {
                         user && user?.accountType!="Instructor" && (
                             <div className='flex gap-8'>
@@ -147,25 +175,45 @@ export const Navbar = () => {
                     </div>
                         
                     {
-                    
-                        NavbarLinks.map((links,index)=>{
-                            return (
-                                <li key={index} className='sm:text-xl text-base leading-4'>
-                                    {
-                                    links.title=="Catalog"?(
-                                        <div className='flex items-center gap-1 transition-all duration-200  cursor-pointer'>
-                                            {links.title}
-                                            <AiOutlineArrowLeft className='translate-y-[2px] rotate-180'/>
-                                            
-                                        </div>
-                                    ):(
-                                        <Link to={links?.path} className={`${matchRoute(links?.path)?"text-yellow-25":""}`}>{links.title}</Link>
-                                    )}
-                                </li>
-                            )
-                        })
+                        <div className='flex gap-8 flex-col  relative'>
+                            <div className='flex gap-8 overflow-auto h-[75vh] flex-col bg-richblack-700 absolute z-30 w-full'>
+                            {
+                                NavbarLinks.map((links,index)=>{
+                                    return (
+                                        <li key={index} className='sm:text-xl text-base leading-4'>
+                                            {
+                                            links.title=="Catalog"?(
+                                                <div className='flex items-center gap-1 transition-all duration-200  cursor-pointer' onClick={()=>{setSecSlide((prev)=>!prev);console.log("second slide sliding in")}}>
+                                                    {links.title}
+                                                    <AiOutlineArrowLeft className='translate-y-[2px] rotate-180'/>
+                                                </div>
+                                            ):(
+                                                <Link to={links?.path} className={`${matchRoute(links?.path)?"text-yellow-25":""}`}>{links.title}</Link>
+                                            )}
+                                        </li>
+                                    )
+                                })
+                            }
+                            </div>
+                            <div className={`flex gap-8 flex-col h-[75vh] overflow-auto overflow-x-hidden bg-richblack-700 ${secSlide?"translate-x-0 transition-transform duration-[300] ease-out":"translate-x-[120%] transition-transform duration-[300] ease-in"} absolute z-40 w-full`}>
+                                {
+                                    subLinks.map((elem,index)=>{
+                                    return (
+                                    <Link key={index} className={`cursor-pointer`}>
+                                        {elem.name}
+                                    </Link>
+                                     )
+                                    })
+                                }
+                            </div>
+                        </div>
+                        
                     }
-                    <AiOutlineClose className='absolute top-[6px] right-[6px]' onClick={()=>{setHamburgerIcons(!hamburgerIcons)}}/>
+                    <AiOutlineClose className='absolute top-[6px] right-[6px]' onClick={()=>{setMenuPos((prev)=>!prev);console.log("menu bar sliding out");console.log(menuPos)}}/>
+                    {
+                        secSlide && 
+                        <AiOutlineArrowLeft className='absolute top-[10px] left-[15px] cursor-pointer' onClick={()=>{setSecSlide((prev)=>!prev);console.log("second slide closing")}}/>
+                    }
                 </ul>
             }
             
@@ -174,7 +222,7 @@ export const Navbar = () => {
                     user && user?.accountType!="Instructor" && (
                         <div className='flex gap-8'>
                         <Link to="/dashboard/cart" className='relative'>
-                            <AiOutlineShoppingCart fill='white' size={25}/>
+                            <AiOutlineShoppingCart fill='white' size={25}  className='cursor-pointer'/>
                             {
                                 totalItems>0 &&
                                 <span className='absolute right-0 top-[44%] left-4 rounded-full min-w-[25px] min-h-[25px] text-sm flex items-center justify-center p-[2px] bg-richblack-600 text-yellow-200'>
@@ -200,7 +248,10 @@ export const Navbar = () => {
                     )
                 }
             </div>
-            <GiHamburgerMenu fill='white' onClick={()=>{setHamburgerIcons(!hamburgerIcons)}} stroke='white' className='md:hidden'/>
+            <div ref={hamRef} className='md:hidden'>
+                <GiHamburgerMenu fill='white' onClick={()=>{setMenuPos((prev)=>!prev);console.log("menu bar sliding in");console.log(menuPos)}} stroke='white' className='md:hidden cursor-pointer'/>
+
+            </div>
         </div>
     </div>
   )

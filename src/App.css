@@ -4,14 +4,13 @@
 html,body{
     overflow-x: hidden;
     height: 100vh;
-    
 }
 .homepage_bg{
   background: url("../src/assets/Images/bghome.svg");
 }
  * {
         scrollbar-width: auto;
-        scrollbar-color: #afb2bf;
+        scrollbar-color: #a9afcc;
       }
       
       /* Chrome, Edge, and Safari */
