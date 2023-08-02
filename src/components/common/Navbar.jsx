@@ -11,8 +11,8 @@ import {AiOutlineDown} from 'react-icons/ai'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import {AiOutlineClose} from 'react-icons/ai'
 import {AiOutlineArrowLeft} from 'react-icons/ai'
-
-
+import {AiOutlineDashboard} from 'react-icons/ai'
+import {HiOutlineLogout} from 'react-icons/hi'
 
 
 export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) => {
@@ -22,8 +22,11 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
     const location=useLocation();
     const [subLinks,setSubLinks]=useState([]);
     const [secSlide,setSecSlide]=useState(false);
+    const [profileDropDown,setProfileDropDown]=useState(false);
     const menuRef=useRef(null);
     const hamRef=useRef(null);
+    const profileDropDownRef=useRef(null);
+    const profile=useRef(null);
     const fetchSubLinks=async()=>{
             try{
                 const result=await apiConnector("GET",categories.CATEGORIES_API);
@@ -52,17 +55,12 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
         setScreenWidth(window.innerWidth);
     }
     const handleOutsideClick=(event)=>{
-            console.log(event.target);
-            console.log(hamRef.current);
-            console.log(menuRef.current);
-            console.log(menuRef.current.contains(event.target));
-            console.log(event.target.parentNode);
-            if(event.target===menuRef.current || menuRef.current.contains(event.target))
+            if(menuRef.current && (event.target===menuRef.current || menuRef.current.contains(event.target)))
             {
                 console.log("target was at menu bar");
                 return 
             }
-            else if(event.target===hamRef.current || hamRef.current.contains(event.target))
+            else if(hamRef.current && (event.target===hamRef.current || hamRef.current.contains(event.target)))
             {
                 console.log("target was at hamburger");
                 return
@@ -70,8 +68,27 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
             setMenuPos(false);
             console.log("menu bar sliding out");
     }
+    const handleOutsideClick2=(event)=>{
+        console.log(profile.current.contains(event.target));
+        console.log(event.target);
+        console.log(event.target.parentNode);
+        if(profileDropDownRef.current && ( profileDropDownRef.current.contains(event.target) || profileDropDownRef.current===event.target))
+        {
+            console.log("target was at profile dropdown");
+            return
+        }
+        if(profile.current && (profile.current.contains(event.target) || profile.current===event.target))
+        {
+            console.log("target was at profile button");
+            return 
+        }
+        setProfileDropDown(false);
+        console.log("profile dropdown set to false");
+
+    }
     useEffect(()=>{
         setMenuPos(false)
+        setProfileDropDown(false);
     },[window.location.pathname])
     useEffect(()=>{
         ResHam()
@@ -82,7 +99,13 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
         return()=>{
             document.removeEventListener('click',handleOutsideClick);
         }
-    },[menuRef,hamRef])
+    },[menuRef,hamRef,handleOutsideClick])
+    useEffect(()=>{
+        document.addEventListener('click',handleOutsideClick2);
+        return ()=>{
+            document.removeEventListener('click',handleOutsideClick2);
+        }
+    },[profileDropDownRef,handleOutsideClick2,profile])
     useEffect(()=>{
         fetchSubLinks();
         window.addEventListener('resize',updateWidth);
@@ -214,17 +237,42 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
             <div className='md:flex gap-x-4 items-center hidden'>
                 {
                     user && user?.accountType!="Instructor" && (
-                        <div className='flex gap-8'>
-                        <Link to="/dashboard/cart" className='relative'>
-                            <AiOutlineShoppingCart fill='white' size={25}  className='cursor-pointer'/>
-                            {
-                                totalItems>0 &&
-                                <span className='absolute right-0 top-[44%] left-4 rounded-full min-w-[25px] min-h-[25px] text-sm flex items-center justify-center p-[2px] bg-richblack-600 text-yellow-200'>
-                                    {totalItems}
-                                </span>
-                            }
-                        </Link>
-                        <img src={`${user.image}`} className='w-[30px] h-[30px] rounded-full'></img>
+                        <div className='flex gap-8 items-center relative'>
+                            <Link to="/dashboard/cart" className='relative'>
+                                <AiOutlineShoppingCart fill='white' size={25}  className='cursor-pointer'/>
+                                {
+                                    totalItems>0 &&
+                                    <span className='absolute right-0 top-[44%] left-4 rounded-full min-w-[25px] min-h-[25px] text-sm flex items-center justify-center p-[2px] bg-richblack-600 text-yellow-200'>
+                                        {totalItems}
+                                    </span>
+                                }
+                            </Link>
+                            <div ref={profile} className='flex gap-1 items-center cursor-pointer relative' onClick={()=>{setProfileDropDown(true)}}>
+                                <img src={`${user.image}`} className='w-[30px] h-[30px] rounded-full' ></img>
+                                <AiOutlineDown fill='white' className='translate-y-[3px]'/>
+                                {
+                                <div ref={profileDropDownRef} className={`bottom-0 right-[-10px] border-[0.5px] ${profileDropDown?"visible":"invisible"} border-richblack-400/30 h-[120px] rounded-lg  w-[150px] bg-richblack-800 translate-y-[calc(100%_+_13px)] z-50  absolute`}>
+                                    <div className='flex flex-col items-center h-full w-full '>
+                                        <Link to="/dashboard" >
+                                                <div className='w-[150px] h-[60px] border-b-[1px] p-2 flex gap-3 items-center  border-richblack-500'>
+                                                <AiOutlineDashboard fill='#AFB2BF' size={25}/>
+                                                <p className='text-richblack-200 text-lg'>Dashboard</p>
+                                                </div>
+                                                
+                                        </Link>
+                                        <Link>
+                                                <div className='w-[150px] h-[60px] flex gap-3 p-2 items-center'>
+                                                <HiOutlineLogout stroke='#AFB2BF' size={25}/>
+                                                <p className='text-richblack-200 text-lg'>Logout</p>
+                                                </div>
+                                                
+                                        </Link>
+                                        
+                                    </div>
+                                </div>
+                                }
+                            </div>
+
                         </div>
                         
                     )
