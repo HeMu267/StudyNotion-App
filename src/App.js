@@ -3,6 +3,8 @@ import { Route,Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Navbar } from "./components/common/Navbar";
 import { useEffect, useState } from "react";
+import {Login} from './pages/Login';
+import {Signup} from './pages/Signup';
 function App() {
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
   const [menuPos,setMenuPos]=useState(false);
@@ -23,8 +25,10 @@ function App() {
       <Navbar hamburgerIcons={hamburgerIcons} setHamburgerIcons={setHamburgerIcons} menuPos={menuPos} setMenuPos={setMenuPos}/>
       <Routes>
         <Route path="/" element={<Home/>}/>
+        <Route path="login" element={<Login/>}/>
+        <Route path="signup" element={<Signup/>}/>
       </Routes>
-      <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute `}></div>
+      <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute z-[20]`}></div>
    </div>
   );
 }

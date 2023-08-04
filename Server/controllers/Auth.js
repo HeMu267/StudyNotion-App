@@ -4,12 +4,11 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const otpGenerator=require("otp-generator");
 const Profile=require("../models/Profile");
-const mailSender=require("../utils/Mailsender");
 require("dotenv").config();
 exports.sendOTP=async(req,res)=>{
     try{
         const {email}=req.body;
-        const checkUserPresent=User.findOne({email});
+        const checkUserPresent=await User.findOne({email});
         if(checkUserPresent)
         {
             return res.status(401).json({
@@ -82,15 +81,15 @@ exports.signUp=async(req,res)=>{
                 message:"User is already registered please login"
             });
         } 
-        const recentOTP=await OTP.findOne({email}).sort({createdAt:-1}).limit(1);
+        const recentOTP=await OTP.find({email}).sort({createdAt:-1}).limit(1);
         console.log(recentOTP);
-        if(recentOTP.length==0)
+        if(recentOTP.length===0)
         {
             return res.status(400).json({
                 success:false,
-                message:"OTP not founf"
+                message:"OTP not found"
             })
-        }else if(otp!==recentOTP.otp){
+        }else if(otp!==recentOTP[0].otp){
             return res.status(400).json({
                 success:false,
                 message:"Invalid otp"
@@ -144,7 +143,7 @@ exports.login=async(req,res)=>{
         if(!user){
             return res.status(401).json({
                 success:false,
-                message:"All fields are required,Please try again"
+                message:"user not present"
             });
         }
         
@@ -157,7 +156,6 @@ exports.login=async(req,res)=>{
             const token=jwt.sign(payload,process.env.JWT_SECRET,{
                 expiresIn:"2h"
             });
-            user=user.toObject();
             user.token=token;
             user.password=undefined;
             const options={

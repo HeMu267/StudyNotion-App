@@ -70,9 +70,6 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
             console.log("menu bar sliding out");
     }
     const handleOutsideClick2=(event)=>{
-        console.log(profile.current.contains(event.target));
-        console.log(event.target);
-        console.log(event.target.parentNode);
         if(profileDropDownRef.current && ( profileDropDownRef.current.contains(event.target) || profileDropDownRef.current===event.target))
         {
             console.log("target was at profile dropdown");
