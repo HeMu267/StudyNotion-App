@@ -4,5 +4,6 @@ export const categories={
     CATEGORIES_API:"http://localhost:4000/api/v1/"+"course/showAllCategories",
 };
 export const endpoints={
-    LOGIN_API:"http://localhost:4000/api/v1/"+"auth/login"
+    LOGIN_API:"http://localhost:4000/api/v1/"+"auth/login",
+    SIGNUP_API:"http://localhost:4000/api/v1/"+"auth/login"
 }
