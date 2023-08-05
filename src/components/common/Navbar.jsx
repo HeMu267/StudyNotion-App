@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import logo from '../../assets/Logo/Logo-Full-Light.png'
-import { Link, matchPath } from 'react-router-dom'
+import { Link, matchPath, useNavigate } from 'react-router-dom'
 import { NavbarLinks } from '../../data/navbar-links'
 import { useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {AiOutlineShoppingCart} from 'react-icons/ai'
 import { apiConnector } from '../../services/apiconnector'
 import { categories } from '../../services/apis'
@@ -13,9 +13,11 @@ import {AiOutlineClose} from 'react-icons/ai'
 import {AiOutlineArrowLeft} from 'react-icons/ai'
 import {AiOutlineDashboard} from 'react-icons/ai'
 import {HiOutlineLogout} from 'react-icons/hi'
-
+import { logout } from '../../services/operations/authAPI'
 
 export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) => {
+    const navigate=useNavigate();
+    const dispatch=useDispatch();
     const {token}=useSelector((state)=>state.auth);
     const {user}=useSelector((state)=>state.profile);
     const {totalItems}=useSelector((state)=>state.cart);
@@ -290,13 +292,13 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                                                 </div>
                                                 
                                         </Link>
-                                        <Link>
+                                        <div onClick={()=>{dispatch(logout(navigate))}}>
                                                 <div className='w-[150px] h-[60px] flex gap-3 rounded-b-md hover:bg-richblack-600 p-2 items-center'>
                                                 <HiOutlineLogout stroke='#AFB2BF' size={25}/>
                                                 <p className='text-richblack-100 text-lg'>Logout</p>
                                                 </div>
                                                 
-                                        </Link>
+                                        </div>
                                         
                                     </div>
                                 </div>
