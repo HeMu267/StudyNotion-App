@@ -6,18 +6,18 @@ import frame from '../../../assets/Images/frame.png'
 export const Template = ({heading,desc1,desc2,formType,img}) => {
   return (
     <div className='w-screen h-[calc(100vh_-_66px)] flex items-center justify-center'>
-      <div className='flex w-[90%] justify-between gap-2'>
-        <div className='flex flex-col w-[40%]'>
-          <h1 className='text-[1.875rem] mb-6 text-richblack-5 font-semibold leading-8 max-w-[450px]'>{heading}</h1>
-          <p className='text-richblack-100 text-[1.225rem] leading-6'>{desc1}</p>
-          <div className='text-[1.225rem] mb-5'>
+      <div className='flex w-11/12 md:flex-row flex-col-reverse max-w-maxContent items-center md:justify-between gap-8'>
+        <div className='flex flex-col max-w-[450px]'>
+          <h1 className='text-[1.875rem] mb-4 text-richblack-5 font-semibold leading-8'>{heading}</h1>
+          <p className='text-richblack-100 text-[1.225rem] mb-6 leading-6'>
+            <span>{desc1}</span> 
             <HighlightText text={desc2}></HighlightText>
-          </div>
+          </p>
           {
             formType=="Login"?<LoginForm/>:<SignupForm/>
           }
         </div>
-        <div className='w-[400px] h-[400px] relative'>
+        <div className='max-w-[450px] md:block hidden relative'>
           <img src={img} className='z-10 absolute top-[-15px] left-[-15px] object-contain' />
           <img src={frame}></img>
         </div>
