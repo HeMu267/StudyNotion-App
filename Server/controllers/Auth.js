@@ -31,7 +31,7 @@ exports.sendOTP=async(req,res)=>{
             })
             result=await OTP.findOne({otp:otp});
         }
-        const otpBody=await OTP.create({email,otp});
+        await OTP.create({email,otp});
         res.status(200).json({
             success:true,
             message:"OTP sent successfully",
@@ -159,7 +159,8 @@ exports.login=async(req,res)=>{
             user.token=token;
             user.password=undefined;
             const options={
-                expires:new Date(Date.now()+ 3*24*60*60*1000)
+                expires:new Date(Date.now()+ 3*24*60*60*1000),
+                httpOnly:true
             }
             res.cookie("token",token,options).status(200).json({
                 success:true,
