@@ -14,10 +14,10 @@ exports.resetPasswordToken=async(req,res)=>{
             })
         }
         const token=crypto.randomUUID();
-        const updatedDetails=await User.findOneAndUpdate({email},{
+        const updatedDetails=await User.findOneAndUpdate({email:email},{
             token:token,
             resetPasswordToken:Date.now() + 5*60*1000
-        })
+        },{new:true})
         const url=`https"//localhost:3000/update-password/${token}`;
         await mailSender(email,"Password Reset Link",`Password Reset link is ${url}`);
         return res.json({
@@ -53,7 +53,7 @@ exports.resetPassword=async(req,res)=>{
                 message:"token is invalid"
             })
         }
-        if(userDetails.resetPasswordExpires < Date.now())
+        if(userDetails.resetPasswordToken < Date.now())
         {
             return res.json({
                 success:false,

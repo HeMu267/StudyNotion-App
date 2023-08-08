@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import {AiOutlineEyeInvisible} from 'react-icons/ai';
 import {AiOutlineEye} from 'react-icons/ai';
-import { Button } from '../Homepage/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { HighlightText } from '../Homepage/HighlightText';
 import { useDispatch } from 'react-redux';

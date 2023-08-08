@@ -5,8 +5,8 @@ import { LoginForm } from './LoginForm'
 import frame from '../../../assets/Images/frame.png'
 export const Template = ({heading,desc1,desc2,formType,img}) => {
   return (
-    <div className='w-screen h-[calc(100vh_-_66px)] flex items-center justify-center'>
-      <div className='flex w-11/12 md:flex-row flex-col-reverse max-w-maxContent items-center md:justify-between gap-8'>
+    <div className='w-screen min-h-[calc(100vh_-_66px)] flex items-center justify-center'>
+      <div className='flex w-11/12 md:flex-row flex-col-reverse mt-9 max-w-maxContent items-center md:justify-between gap-8'>
         <div className='flex flex-col max-w-[450px]'>
           <h1 className='text-[1.875rem] mb-4 text-richblack-5 font-semibold leading-8'>{heading}</h1>
           <p className='text-richblack-100 text-[1.225rem] mb-6 leading-6'>
