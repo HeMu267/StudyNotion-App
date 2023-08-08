@@ -5,6 +5,7 @@ import { Navbar } from "./components/common/Navbar";
 import { useEffect, useState } from "react";
 import {Login} from './pages/Login';
 import {Signup} from './pages/Signup';
+import {VerifyEmail} from './pages/VerifyEmail'
 function App() {
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
   const [menuPos,setMenuPos]=useState(false);
@@ -27,6 +28,7 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="signup" element={<Signup/>}/>
+        <Route path="/verify-email" element={<VerifyEmail/>}></Route>
       </Routes>
       <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute z-[20]`}></div>
    </div>
