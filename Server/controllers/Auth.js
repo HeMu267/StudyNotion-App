@@ -21,7 +21,6 @@ exports.sendOTP=async(req,res)=>{
             lowerCaseAlphabets:false,
             specialChars:false
         })
-        console.log("OTP generated",otp);
         var result=await OTP.findOne({otp:otp});
         while(result){
             otp=otpGenerator.generate(6,{
@@ -35,7 +34,6 @@ exports.sendOTP=async(req,res)=>{
         res.status(200).json({
             success:true,
             message:"OTP sent successfully",
-            otp:otp
         })
 
     }
@@ -82,7 +80,6 @@ exports.signUp=async(req,res)=>{
             });
         } 
         const recentOTP=await OTP.find({email}).sort({createdAt:-1}).limit(1);
-        console.log(recentOTP);
         if(recentOTP.length===0)
         {
             return res.status(400).json({
@@ -113,7 +110,7 @@ exports.signUp=async(req,res)=>{
             additionalDetails:profileDetails._id,
             image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
         })
-        return res.status(403).json({
+        return res.status(200).json({
             success:true,
             message:"User is registered",
             user
