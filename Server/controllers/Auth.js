@@ -4,6 +4,7 @@ const jwt=require("jsonwebtoken");
 const bcrypt=require("bcrypt");
 const otpGenerator=require("otp-generator");
 const Profile=require("../models/Profile");
+const passwordUpdated=require("../Mails/Templates/passwordUpdate");
 require("dotenv").config();
 exports.sendOTP=async(req,res)=>{
     try{
@@ -197,7 +198,8 @@ exports.changePassword=async(req,res)=>{
             await User.findByIdAndUpdate(user._id,{
                 password:newPassword
             });
-            let mailResponse=await mailSender(email,"Password Reset Succesful","Your password has been reseted");
+            const body=passwordUpdated(email);
+            let mailResponse=await mailSender(email,"Password Reset Succesful",body);
             return res.status(401).json({
                 success:true,
                 message:"Your password has been reset",

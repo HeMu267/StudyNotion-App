@@ -1,4 +1,4 @@
-exports.passwordUpdated = (email, name) => {
+const passwordUpdated = (email) => {
 	return `<!DOCTYPE html>
     <html>
     
@@ -59,7 +59,7 @@ exports.passwordUpdated = (email, name) => {
                     src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
             <div class="message">Password Update Confirmation</div>
             <div class="body">
-                <p>Hey ${name},</p>
+                <p>Hey,</p>
                 <p>Your password has been successfully updated for the email <span class="highlight">${email}</span>.
                 </p>
                 <p>If you did not request this password change, please contact us immediately to secure your account.</p>
@@ -73,3 +73,4 @@ exports.passwordUpdated = (email, name) => {
     
     </html>`;
 };
+module.exports=passwordUpdated;
