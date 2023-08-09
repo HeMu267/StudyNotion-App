@@ -6,7 +6,9 @@ import {endpoints} from '../apis'
 import {resetCart} from '../../slices/cartSlice'
 const {
     LOGIN_API,
-    SIGNUP_API,SENDOTP_API
+    SIGNUP_API,SENDOTP_API,
+    RESETPASSTOKEN_API,
+    RESETPASSWORD_API
 }=endpoints
 export function sendotp(email,navigate)
 {
@@ -101,4 +103,54 @@ export function logout(navigate){
         navigate("/");
     }
     
+}
+export function forgotPassword(email,setEmailSent)
+{
+    return async(dispatch)=>{
+        dispatch(setLoading(true));
+        const toastID=toast.loading("Loading...")
+        try{
+            const res=await apiConnector("POST",RESETPASSTOKEN_API,{
+                email
+            });
+            console.log("RES OF FORGOTPASSWORD",res);
+            if(!res.data.success)
+            {
+                throw new Error(res.data.message);
+            }
+            toast.success("Email to reset password Sent");
+            setEmailSent(true);
+        }catch(err)
+        {
+            console.log("RESETPASS TOKEN API ERROR............", err)
+            toast.error("RESETPASS  Failed")
+        }
+        dispatch(setLoading(false));
+        toast.dismiss(toastID);
+    }
+}
+export function updatePassword(password,confirmPassword,token,navigate)
+{
+    return async(dispatch)=>{
+        dispatch(setLoading(true));
+        const toastID=toast.loading("Loading...")
+        try{
+            const res=await apiConnector("POST",RESETPASSWORD_API,{
+                password,confirmPassword,token
+            });
+            console.log("RES OF UPDATEPASSWORD",res);
+            if(!res.data.success)
+            {
+                throw new Error(res.data.message);
+            }
+            toast.success("Password Reset successfully");
+            navigate("/login");
+        }catch(err)
+        {
+            console.log("UPDATEPASS TOKEN API ERROR............", err)
+            toast.error("UPDATEPASS  Failed")
+        }
+        dispatch(setLoading(false));
+        toast.dismiss(toastID);
+    }
 }

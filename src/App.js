@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import {Login} from './pages/Login';
 import {Signup} from './pages/Signup';
 import {VerifyEmail} from './pages/VerifyEmail'
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { UpdatePassword } from "./pages/UpdatePassword";
 function App() {
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
   const [menuPos,setMenuPos]=useState(false);
@@ -28,7 +30,9 @@ function App() {
         <Route path="/" element={<Home/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="signup" element={<Signup/>}/>
-        <Route path="/verify-email" element={<VerifyEmail/>}></Route>
+        <Route path="verify-email" element={<VerifyEmail/>}></Route>
+        <Route path="forgotPassword" element={<ForgotPassword/>}></Route>
+        <Route path="update-password/:id" element={<UpdatePassword/>}></Route>
       </Routes>
       <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute z-[20]`}></div>
    </div>

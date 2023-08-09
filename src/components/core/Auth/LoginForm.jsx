@@ -51,7 +51,7 @@ export const LoginForm = () => {
           <AiOutlineEye className='absolute z-10 bottom-[10px] right-[20px] cursor-pointer' fill='#AFB2BF' size={30} onClick={()=>{setShowPassword((prev)=>!prev)}} />:
           <AiOutlineEyeInvisible className='absolute z-10 bottom-[10px] right-[20px] cursor-pointer' fill='#AFB2BF' size={30} onClick={()=>{setShowPassword((prev)=>!prev)}}/>
         }
-        <Link to='resetPassword'>
+        <Link to='/forgotPassword'>
           <div className='absolute bottom-0 translate-y-[120%]  right-0'>
             <HighlightText text={"Forgot Password"}></HighlightText>
           </div>

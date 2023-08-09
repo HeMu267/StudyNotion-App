@@ -69,8 +69,8 @@ export const VerifyEmail = () => {
         dispatch(signup(email,accountType,firstName,lastName,password,confirmPassword,otp,navigate));
     }
   return (
-    <div className='flex justify-center items-center w-screen h-[calc(100vh_-_10rem)]'>
-        <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+    <div className='flex justify-center max-[1560px]:items-center w-screen h-[calc(100vh_-_10rem)]'>
+        <form className='flex flex-col gap-4 min-[1560px]:mt-72 max-[500px]:scale-75' onSubmit={handleSubmit}>
             <h1 className='text-richblack-5 text-[1.875rem] leading-6'>Verify Email</h1>
             <p className='text-richblack-100 text-[1.125rem] max-w-[400px]'>A verification code has been sent to you. Enter the code below</p>
             <div className='flex gap-2'>
