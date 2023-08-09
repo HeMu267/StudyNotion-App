@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
     cors({
-        origin:"httpsgit ://localhost:3000",
+        origin:"https://localhost:3000",
         credentials:true,
     })
 )
