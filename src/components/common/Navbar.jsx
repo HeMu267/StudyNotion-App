@@ -244,7 +244,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                                 user && user?.accountType!="Instructor" &&(
                                     <div className={`flex gap-8 flex-col h-[75vh] overflow-auto overflow-x-hidden bg-richblack-700 ${profSlide?"translate-x-0 transition-transform duration-[300] ease-out":"translate-x-[120%] transition-transform duration-[300] ease-in"} absolute z-40 w-full`}>
                                         <div className='flex flex-col gap-8'>
-                                           <Link to="/dashboard">
+                                           <Link to="/dashboard/my-profile">
                                                 <div className='flex gap-4 items-center'>
                                                     <AiOutlineDashboard size={25}/>
                                                     <p className='text-lg'>Dashboard</p>
@@ -285,7 +285,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                                 {
                                 <div ref={profileDropDownRef} className={`bottom-0 right-[-10px] border-[0.5px] ${profileDropDown?"visible":"invisible"} border-richblack-400/30 h-[120px] rounded-lg  w-[150px] bg-richblack-800 translate-y-[calc(100%_+_13px)] z-50  absolute`}>
                                     <div className='flex flex-col items-center h-full w-full '>
-                                        <Link to="/dashboard" >
+                                        <Link to="/dashboard/my-profile" >
                                                 <div className='w-[150px] h-[60px] border-b-[1px]  hover:bg-richblack-600 rounded-t-md p-2 flex gap-3 items-center  border-richblack-500'>
                                                 <AiOutlineDashboard fill='#AFB2BF' size={25}/>
                                                 <p className='text-richblack-100 text-lg'>Dashboard</p>

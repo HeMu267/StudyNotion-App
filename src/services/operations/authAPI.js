@@ -81,7 +81,7 @@ export function login(email,password,navigate){
               : `https://api.dicebear.com/5.x/initials/svg?seed=${res.data.user.firstName} ${res.data.user.lastName}`
             dispatch(setUser({ ...res.data.user, image: userImage }));
             localStorage.setItem("token", JSON.stringify(res.data.token));
-            navigate("/dashboard/profile")
+            navigate("/dashboard/my-profile")
         }
         catch(err)
         {
