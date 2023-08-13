@@ -26,7 +26,7 @@ export const ContactUs = () => {
         }
     }
   return (
-    <form className='flex flex-col gap-4 mb-10 w-[50%] text-richblack-5' onSubmit={handleSubmit(submitContactForm)}>
+    <form className='flex flex-col gap-4 mb-10 w-full text-richblack-5' onSubmit={handleSubmit(submitContactForm)}>
         <div className='flex gap-4'>
             <div className='w-[50%]'>
                 <label>

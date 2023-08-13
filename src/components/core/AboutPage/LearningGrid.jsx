@@ -45,20 +45,20 @@ export const LearningGrid = () => {
         },
       ];    
   return (
-    <div className='grid grid-cols-4 mt-20'>
+    <div className='grid w-[300px] lg:w-full mx-auto grid-cols-1 lg:grid-cols-4 mt-20'>
         {
             LearningGridArray.map((card,index)=>{
                 return (
                     <div key={index} className={
-                        `${index===0 && "col-span-2 bg-transparent"} ${
+                        `${index===0 && "lg:col-span-2 bg-transparent"} ${
                             card.order%2===0?"bg-richblack-800":"bg-richblack-700"
                         } ${
-                            card.order===3 && "col-start-2"
-                        } h-[254px]`
+                            card.order===3 && "lg:col-start-2"
+                        } lg:h-[300px]`
                     }>
                     {
                         card.order<0 ?
-                        <div className='flex flex-col items-start'>
+                        <div className='flex p-4 flex-col items-start'>
                             <h1 className='text-richblack-5 text-4xl'>{card.heading}</h1>
                             <div className='text-4xl mb-4'><HighlightText text={card.highlightText}></HighlightText></div>
                             <p className='text-base mb-6 text-richblack-300'>{card.description}</p>
