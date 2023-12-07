@@ -11,6 +11,7 @@ export const UpdatePassword = () => {
     const location=useLocation(); 
     const [showPassword,setShowPassword]=useState(false);
     const [showPassword1,setShowPassword1]=useState(false);
+    const {loading}=useSelector((state)=>state.auth);
     const [formData,setFormData]=useState({
         password:"",
         confirmPassword:"",
@@ -42,6 +43,10 @@ export const UpdatePassword = () => {
     }
   return (
     <div className='flex justify-center max-[1560px]:items-center w-screen h-[calc(100vh_-_5rem)]'>
+    {
+      loading?(
+        <div className='spinner'></div>
+      ):(
         <form className='flex flex-col gap-4 min-[1560px]:mt-72 max-[500px]:scale-75' onSubmit={handleSubmit}>
             <h1 className='text-richblack-5 text-[1.875rem] leading-6'>Choose new password</h1>
             <p className='text-richblack-100 text-[1.125rem] max-w-[400px]'>Almost done. Enter your new password and youre all set.</p>
@@ -87,6 +92,9 @@ export const UpdatePassword = () => {
                     <p className='text-richblack-5'>Back to login </p>
             </div>
         </form>
+      )
+    }
+        
     </div>
   )
 }

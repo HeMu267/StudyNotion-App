@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { sendotp, signup } from '../services/operations/authAPI'
 export const VerifyEmail = () => {
-    const {signupData}=useSelector((state=>state.auth));
+    const {signupData,loading}=useSelector((state=>state.auth));
     const navigate=useNavigate();
     const dispatch=useDispatch();
     const arr=[0,1,2,3,4,5];
@@ -70,7 +70,11 @@ export const VerifyEmail = () => {
     }
   return (
     <div className='flex justify-center max-[1560px]:items-center w-screen h-[calc(100vh_-_10rem)]'>
-        <form className='flex flex-col gap-4 min-[1560px]:mt-72 max-[500px]:scale-75' onSubmit={handleSubmit}>
+    {
+        loading?(
+            <div className='spinner'></div>
+        ):(
+            <form className='flex flex-col gap-4 min-[1560px]:mt-72 max-[500px]:scale-75' onSubmit={handleSubmit}>
             <h1 className='text-richblack-5 text-[1.875rem] leading-6'>Verify Email</h1>
             <p className='text-richblack-100 text-[1.125rem] max-w-[400px]'>A verification code has been sent to you. Enter the code below</p>
             <div className='flex gap-2'>
@@ -108,7 +112,9 @@ export const VerifyEmail = () => {
                     <p>Resend it</p>
                 </div>
           </div>
-        </form>  
+        </form>
+        )
+    }     
     </div>
   )
 }

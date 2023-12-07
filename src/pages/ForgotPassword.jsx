@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {AiOutlineArrowLeft} from 'react-icons/ai'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {forgotPassword} from '../services/operations/authAPI';
 export const ForgotPassword = () => {
   const navigate=useNavigate();
   const [email,setEmail]=useState("");
   const [emailSent,SetEmailSent]=useState(false);
   const dispatch=useDispatch();
+  const {loading}=useSelector((state)=>state.auth)
   const handleChange=(event)=>{
     setEmail(event.target.value)
   }
@@ -17,6 +18,10 @@ export const ForgotPassword = () => {
   }
   return (
     <div className='flex justify-center max-[1560px]:items-center w-screen h-[calc(100vh_-_6rem)]'>
+    {
+      loading?(
+        <div className='spinner'></div>
+      ):(
         <form className='flex flex-col gap-4 min-[1560px]:mt-72 max-[500px]:scale-75' onSubmit={handleSubmit} >
           {
             emailSent?
@@ -54,7 +59,8 @@ export const ForgotPassword = () => {
                     <p className='text-richblack-5'>Back to login </p>
           </div>
         </form>
-        
+      )
+    } 
     </div>
   )
 }
