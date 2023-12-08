@@ -11,6 +11,7 @@ import { UpdatePassword } from "./pages/UpdatePassword";
 import { About } from "./pages/About";
 import { OpenRoute } from "./components/core/Auth/OpenRoute";
 import Error from "./pages/Error";
+import Contact from "./pages/Contact";
 function App() {
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
   const [menuPos,setMenuPos]=useState(false);
@@ -76,6 +77,11 @@ function App() {
           </OpenRoute>
         }>
         </Route>
+
+        <Route path="contact" element={<Contact/>}>
+
+        </Route>
+
         <Route path="*" element={<Error/>} />
       </Routes>
       <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute z-[20]`}></div>
