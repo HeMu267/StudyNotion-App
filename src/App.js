@@ -9,6 +9,7 @@ import {VerifyEmail} from './pages/VerifyEmail'
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { UpdatePassword } from "./pages/UpdatePassword";
 import { About } from "./pages/About";
+import { OpenRoute } from "./components/core/Auth/OpenRoute";
 function App() {
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
   const [menuPos,setMenuPos]=useState(false);
@@ -29,12 +30,52 @@ function App() {
       <Navbar hamburgerIcons={hamburgerIcons} setHamburgerIcons={setHamburgerIcons} menuPos={menuPos} setMenuPos={setMenuPos}/>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="login" element={<Login/>}/>
-        <Route path="signup" element={<Signup/>}/>
-        <Route path="verify-email" element={<VerifyEmail/>}></Route>
-        <Route path="forgotPassword" element={<ForgotPassword/>}></Route>
-        <Route path="update-password/:id" element={<UpdatePassword/>}></Route>
-        <Route path="about" element={<About/>}></Route>
+        <Route 
+          path="login" 
+          element={
+            <OpenRoute>
+              <Login/>
+            </OpenRoute>
+          }
+        />
+        <Route path="signup" 
+          element=
+          {
+            <OpenRoute>
+              <Signup/>
+            </OpenRoute>
+          }
+          />
+        <Route path="verify-email"
+         element={
+          <OpenRoute>
+            <VerifyEmail/>
+          </OpenRoute>
+         }>
+         </Route>
+        <Route path="forgotPassword" 
+        element={
+          <OpenRoute>
+            <ForgotPassword/>
+          </OpenRoute>
+        }>
+        </Route>
+        <Route path="update-password/:id" 
+        element={
+          <OpenRoute>
+            <UpdatePassword/>
+          </OpenRoute>
+        }>
+
+        </Route>
+        <Route path="about" 
+        element={
+          <OpenRoute>
+            <About/>
+          </OpenRoute>
+        }>
+        </Route>
+        <Route path="*" element={<Error />} />
       </Routes>
       <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute z-[20]`}></div>
    </div>
