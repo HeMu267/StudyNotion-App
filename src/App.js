@@ -10,6 +10,9 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { UpdatePassword } from "./pages/UpdatePassword";
 import { About } from "./pages/About";
 import { OpenRoute } from "./components/core/Auth/OpenRoute";
+import PrivateRoute from "./components/core/Auth/PrivateRoute"
+import { Dashboard } from "./pages/Dashboard";
+import MyProfile from "./components/core/dashboard/MyProfile";
 import Error from "./pages/Error";
 import Contact from "./pages/Contact";
 function App() {
@@ -81,7 +84,25 @@ function App() {
         <Route path="contact" element={<Contact/>}>
 
         </Route>
-
+        <Route 
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          >
+            <Route path="dashboard/my-profile" element={<MyProfile />} />
+            {/* <Route path="dashboard/Settings" element={<Settings />} /> */}
+         
+            {/* {
+              user?.accountType === ACCOUNT_TYPE.STUDENT && (
+                <>
+                <Route path="dashboard/cart" element={<Cart />} />
+                <Route path="dashboard/enrolled-courses" element={<EnrolledCourses />} />
+                </>
+              )
+            } */}
+        </Route>
         <Route path="*" element={<Error/>} />
       </Routes>
       <div className={`w-screen h-screen ${menuPos?"visible":"invisible"} bg-black/50 absolute z-[20]`}></div>
