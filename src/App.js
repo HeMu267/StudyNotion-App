@@ -14,6 +14,7 @@ import PrivateRoute from "./components/core/Auth/PrivateRoute"
 import { Dashboard } from "./pages/Dashboard";
 import MyProfile from "./components/core/dashboard/MyProfile";
 import Error from "./pages/Error";
+import Settings from "./components/core/dashboard/settings";
 import Contact from "./pages/Contact";
 function App() {
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
@@ -92,16 +93,9 @@ function App() {
             }
           >
             <Route path="dashboard/my-profile" element={<MyProfile />} />
-            {/* <Route path="dashboard/Settings" element={<Settings />} /> */}
+            <Route path="dashboard/Settings" element={<Settings />} />
          
-            {/* {
-              user?.accountType === ACCOUNT_TYPE.STUDENT && (
-                <>
-                <Route path="dashboard/cart" element={<Cart />} />
-                <Route path="dashboard/enrolled-courses" element={<EnrolledCourses />} />
-                </>
-              )
-            } */}
+            
         </Route>
         <Route path="*" element={<Error/>} />
       </Routes>
