@@ -1,7 +1,7 @@
-const Course = require("../models/Course");
+const Course=require("../models/Course");
 const Profile=require("../models/Profile");
 const User=require("../models/User");
-const { default: uploadImageToCloudinary } = require("../utils/ImageUploader");
+const {uploadImageToCloudinary} = require("../utils/ImageUploader");
 exports.updateProfile=async(req,res)=>{
     try{
         const {dateOfBirth="",about="",contactNumber,gender}=req.body;
@@ -105,7 +105,7 @@ exports.updateDisplayPicture=async(req,res)=>{
         );
         console.log(image)
         const updatedProfile = await User.findByIdAndUpdate(
-            { _id: userId },
+            { _id: userID },
             { image: image.secure_url },
             { new: true }
         )
@@ -118,7 +118,7 @@ exports.updateDisplayPicture=async(req,res)=>{
     {
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: err.message,
           })
     }
 }
@@ -135,7 +135,7 @@ exports.getEnrolledCourses=async(req,res)=>{
         return res.status(200).json({
             success:true,
             message:"enrolled courses retrieved",
-            courses:user.courses,
+            courses:userDetails.courses,
         })
     }catch(err)
     {
