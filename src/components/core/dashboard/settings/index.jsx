@@ -11,6 +11,9 @@ export default function Settings() {
       </h1>
       {/* Change Profile Picture */}
       <ChangeProfilePicture />
+      <DeleteAccount/>
+      <EditProfile/>
+      <UpdatePassword/>
     </>
   )
 }

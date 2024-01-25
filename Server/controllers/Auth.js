@@ -5,6 +5,7 @@ const bcrypt=require("bcrypt");
 const otpGenerator=require("otp-generator");
 const Profile=require("../models/Profile");
 const passwordUpdated=require("../Mails/Templates/passwordUpdate");
+const mailSender=require("../utils/Mailsender");
 require("dotenv").config();
 exports.sendOTP=async(req,res)=>{
     try{
@@ -128,6 +129,43 @@ exports.signUp=async(req,res)=>{
         })
     }
 }
+exports.refreshToken=async(req,res)=>{
+    try{
+        const refreshToken=req.body.refreshToken;
+        const userID=jwt.verify(refreshToken,process.env.JWT_REFRESH_SECRET);
+        const userID1=userID.id
+        const user=await User.findById(userID1);
+        const payload={
+            email:user.email,
+            id:user._id,
+            role:user.accountType
+        }
+        const token=jwt.sign(payload,process.env.JWT_SECRET,{
+            expiresIn:"24h"
+        });
+        user.token=token;
+        user.refreshToken=refreshToken;
+        user.password=undefined;
+        const options={
+                expires:new Date(Date.now()+ 10*24*60*60*1000),
+                httpOnly:true
+        }
+        res.cookie("token",token,options);
+        res.cookie("resfresh",refreshToken,options);
+        res.status(200).json({
+                success:true,
+                token,
+                refreshToken,
+                user,
+                message:"refresh token send successfully"
+        })
+    }
+    catch(err)
+    {
+        console.error('Error refreshing token:', err.message);
+        res.status(401).json({ message: 'Invalid refresh token' });
+    }
+}
 exports.login=async(req,res)=>{
     try{
         const {email,password}=req.body;
@@ -152,9 +190,16 @@ exports.login=async(req,res)=>{
                 role:user.accountType
             }
             const token=jwt.sign(payload,process.env.JWT_SECRET,{
-                expiresIn:"2h"
+                expiresIn:"24h"
+            });
+            const payload1={
+                id:user._id
+            }
+            const refreshToken=jwt.sign(payload1,process.env.JWT_REFRESH_SECRET,{
+                expiresIn:"10d"
             });
             user.token=token;
+            user.refreshToken=refreshToken;
             user.password=undefined;
             const options={
                 expires:new Date(Date.now()+ 3*24*60*60*1000),
@@ -163,6 +208,7 @@ exports.login=async(req,res)=>{
             res.cookie("token",token,options).status(200).json({
                 success:true,
                 token,
+                refreshToken,
                 user,
                 message:"Logged in successfully"
             })
@@ -186,21 +232,23 @@ exports.login=async(req,res)=>{
 }
 exports.changePassword=async(req,res)=>{
     try{
-        const {email,oldPassword,newPassword,confirmNewPassword}=req.body;
-        if(!oldPassword || !newPassword || !confirmNewPassword || !email){
+		const userDetails = await User.findById(req.user.id);
+        const {oldPassword,newPassword}=req.body;
+        if(!oldPassword || !newPassword ){
             return res.status(401).json({
                 success:false,
                 message:"All fields are required,Please try again"
             });
         }
-        const user=await User.findOne({email});
-        if(newPassword==confirmNewPassword || await bcrypt.compare(oldPassword,user.password)){
-            await User.findByIdAndUpdate(user._id,{
-                password:newPassword
+        console.log(oldPassword);
+        if(await bcrypt.compare(oldPassword,userDetails.password)){
+            const encryptedPassword = await bcrypt.hash(newPassword, 10);
+            await User.findByIdAndUpdate(userDetails._id,{
+                password:encryptedPassword
             });
-            const body=passwordUpdated(email);
-            let mailResponse=await mailSender(email,"Password Reset Succesful",body);
-            return res.status(401).json({
+            const body=passwordUpdated(userDetails.email);
+            let mailResponse=await mailSender(userDetails.email,"Password Reset Succesful",body);
+            return res.status(200).json({
                 success:true,
                 message:"Your password has been reset",
                 mailResponse

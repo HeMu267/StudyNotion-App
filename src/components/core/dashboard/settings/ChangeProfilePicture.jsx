@@ -6,7 +6,7 @@ import { updateDisplayPicture } from "../../../../services/operations/SettingsAP
 import IconBtn from "../../../common/IconBtn"
 
 export default function ChangeProfilePicture() {
-  const { token } = useSelector((state) => state.auth)
+  const { token,refreshToken } = useSelector((state) => state.auth)
   const { user } = useSelector((state) => state.profile)
   const dispatch = useDispatch()
 
@@ -44,7 +44,7 @@ export default function ChangeProfilePicture() {
       const formData = new FormData()
       formData.append("displayPicture", imageFile)
       // console.log("formdata", formData)
-      dispatch(updateDisplayPicture(token, formData)).then(() => {
+      dispatch(updateDisplayPicture(token,refreshToken,formData)).then(() => {
         setLoading(false)
       })
     } catch (error) {
@@ -86,6 +86,7 @@ export default function ChangeProfilePicture() {
               <IconBtn
                 text={loading ? "Uploading..." : "Upload"}
                 onclick={handleFileUpload}
+                disabled={!imageFile ? true : false}
               >
                 {!loading && (
                   <FiUpload className="text-lg text-richblack-900" />
