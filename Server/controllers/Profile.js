@@ -2,6 +2,7 @@ const Course=require("../models/Course");
 const Profile=require("../models/Profile");
 const User=require("../models/User");
 const {uploadImageToCloudinary} = require("../utils/ImageUploader");
+const {DeleteImage}=require("../utils/DeleteImage");
 exports.updateProfile=async(req,res)=>{
     try{
         const {dateOfBirth="",about="",contactNumber,gender}=req.body;
@@ -103,7 +104,10 @@ exports.updateDisplayPicture=async(req,res)=>{
             1000,
             1000
         );
-        console.log(image)
+        console.log(image);
+        const user=await User.findById(userID);
+        const deleteResult=await DeleteImage(user.image);
+        console.log(deleteResult);
         const updatedProfile = await User.findByIdAndUpdate(
             { _id: userID },
             { image: image.secure_url },

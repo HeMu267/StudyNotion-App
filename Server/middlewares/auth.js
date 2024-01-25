@@ -16,9 +16,17 @@ exports.auth=(req,res,next)=>{
         }
         catch(err)
         {
+            const decodedToken=jwt.decode(token);
+            if (decodedToken && decodedToken.exp && decodedToken.exp * 1000 < Date.now()) 
+            {  
+                return res.status(401).json({
+                    success:false,
+                    message:"token expired"
+                })
+            }
             console.log("token is invalid");
             console.error(err);
-             res.status(401).json({
+            res.status(401).json({
                 success:false,
                 message:"token is invalid"
             })
@@ -27,6 +35,7 @@ exports.auth=(req,res,next)=>{
     }
     catch(err)
     {
+        console.log(err);
         res.status(401).json({
             success:false,
             message:"authorization cannot be done"
