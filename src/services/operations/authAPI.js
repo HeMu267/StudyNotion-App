@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast"
-import {setLoading,setSignupData,setToken} from "../../slices/authSlice"
+import {setLoading,setSignupData,setToken,setRefreshToken} from "../../slices/authSlice"
 import {setUser} from "../../slices/profileSlice"
 import {apiConnector} from '../apiconnector'
 import {endpoints} from '../apis'
@@ -76,11 +76,13 @@ export function login(email,password,navigate){
             }
             toast.success("Login Successful");
             dispatch(setToken(res.data.token));
+            dispatch(setRefreshToken(res.data.refreshToken));
             const userImage = res.data?.user?.image
               ? res.data.user.image
               : `https://api.dicebear.com/5.x/initials/svg?seed=${res.data.user.firstName} ${res.data.user.lastName}`
             dispatch(setUser({ ...res.data.user, image: userImage }));
             localStorage.setItem("token", JSON.stringify(res.data.token));
+            localStorage.setItem("refreshToken",JSON.stringify(res.data.refreshToken));
             navigate("/dashboard/my-profile")
         }
         catch(err)

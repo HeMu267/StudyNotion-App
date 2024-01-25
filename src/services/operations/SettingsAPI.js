@@ -1,10 +1,9 @@
 import { toast } from "react-hot-toast"
-
 import { setUser } from "../../slices/profileSlice"
 import { apiConnector } from "../apiconnector"
 import { settingsEndpoints } from "../apis"
 import { logout } from "./authAPI"
-
+import { RefreshToken } from "../../utils/refreshToken"
 const {
   UPDATE_DISPLAY_PICTURE_API,
   UPDATE_PROFILE_API,
@@ -12,7 +11,7 @@ const {
   DELETE_PROFILE_API,
 } = settingsEndpoints
 
-export function updateDisplayPicture(token, formData) {
+export function updateDisplayPicture(token,refreshToken,formData) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     try {
@@ -36,14 +35,28 @@ export function updateDisplayPicture(token, formData) {
       toast.success("Display Picture Updated Successfully")
       dispatch(setUser(response.data.data))
     } catch (error) {
-      console.log("UPDATE_DISPLAY_PICTURE_API API ERROR............", error)
-      toast.error("Could Not Update Display Picture")
+        console.log(error.response.data.message);
+        if(error.response.data.message==='token expired')
+        {
+          try{
+            const newToken=await dispatch(RefreshToken(refreshToken));
+            dispatch(updateDisplayPicture(newToken,refreshToken,formData));
+          }catch(err)
+          {
+            console.log(err);
+            toast.error("refresh err");
+          }
+        }
+        else{
+          console.log("UPDATE_DISPLAY_PICTURE_API API ERROR............", error)
+          toast.error("Could Not Update Display Picture")
+        }
     }
     toast.dismiss(toastId)
   }
 }
 
-export function updateProfile(token, formData) {
+export function updateProfile(token,refreshToken,formData) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     try {
@@ -63,16 +76,31 @@ export function updateProfile(token, formData) {
       )
       toast.success("Profile Updated Successfully")
     } catch (error) {
-      console.log("UPDATE_PROFILE_API API ERROR............", error)
-      toast.error("Could Not Update Profile")
+      console.log(error.response.data.message);
+      if(error.response.data.message==='token expired')
+        {
+          try{
+            const newToken=await dispatch(RefreshToken(refreshToken));
+            dispatch(updateProfile(newToken,refreshToken,formData));
+          }catch(err)
+          {
+            console.log(err);
+            toast.error("refresh err");
+          }
+      }
+      else{
+        console.log("UPDATE_PROFILE_API API ERROR............", error)
+        toast.error("Could Not Update Profile")
+      }
     }
     toast.dismiss(toastId)
   }
 }
 
-export async function changePassword(token, formData) {
+export async function changePassword(token,refreshToken,formData) {
   const toastId = toast.loading("Loading...")
   try {
+    console.log(formData);
     const response = await apiConnector("POST", CHANGE_PASSWORD_API, formData, {
       Authorization: `Bearer ${token}`,
     })
@@ -83,13 +111,27 @@ export async function changePassword(token, formData) {
     }
     toast.success("Password Changed Successfully")
   } catch (error) {
-    console.log("CHANGE_PASSWORD_API API ERROR............", error)
-    toast.error(error.response.data.message)
+      console.log(error.response.data.message);
+      if(error.response.data.message==='token expired')
+        {
+          try{
+            const newToken=await RefreshToken(refreshToken);
+            (changePassword(newToken,refreshToken,formData));
+          }catch(err)
+          {
+            console.log(err);
+            toast.error("refresh err");
+          }
+      }
+      else{
+        console.log("CHANGE_PASSWORD_API API ERROR............", error)
+        toast.error(error.response.data.message)
+      }
   }
   toast.dismiss(toastId)
 }
 
-export function deleteProfile(token, navigate) {
+export function deleteProfile(token,refreshToken,navigate) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
     try {
@@ -104,8 +146,22 @@ export function deleteProfile(token, navigate) {
       toast.success("Profile Deleted Successfully")
       dispatch(logout(navigate))
     } catch (error) {
-      console.log("DELETE_PROFILE_API API ERROR............", error)
-      toast.error("Could Not Delete Profile")
+      console.log(error.response.data.message);
+      if(error.response.data.message==='token expired')
+        {
+          try{
+            const newToken=await dispatch(RefreshToken(refreshToken));
+            dispatch(deleteProfile(newToken,refreshToken,navigate));
+          }catch(err)
+          {
+            console.log(err);
+            toast.error("refresh err");
+          }
+      }
+      else{
+        console.log("DELETE_PROFILE_API API ERROR............", error)
+        toast.error("Could Not Delete Profile")
+      }
     }
     toast.dismiss(toastId)
   }
