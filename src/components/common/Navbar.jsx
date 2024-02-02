@@ -33,15 +33,12 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
     }
     const [screenWidth,setScreenWidth]=useState(window.innerWidth);
     const ResHam=()=>{
-        console.log("window is being resized");
         if(screenWidth>=768)
         {
-            console.log("Falsing Hamburger icon width>768px");
             setHamburgerIcons(false);
             setMenuPos(false);
         }
         else{
-            console.log("hamburger set to true width<768px");
             setHamburgerIcons(true);
         }
     }
@@ -55,7 +52,6 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
     useEffect(()=>{
         ResHam()
     },[screenWidth])
-
 
     useEffect(()=>{
         fetchSubLinks();
@@ -71,7 +67,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
     <div className='w-screen border-b-[1px] relative border-richblack-700 py-3 px-2'>
         <div className='w-11/12  flex items-center mx-auto justify-between max-w-maxContent'>
             <Link to='/'>
-                <img src={logo} width={160} height={32}></img>
+                <img src={logo} alt='hello' width={160} height={32}></img>
             </Link>
             <nav className="hidden md:block">
             {    
@@ -81,7 +77,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                             return (
                                 <li key={index} className='text-[16px] leading-6'>
                                     {
-                                    links.title=="Catalog"?(
+                                    links.title==="Catalog"?(
                                         <div className='flex items-center gap-1 group transition-all duration-200  cursor-pointer'>
                                             {links.title}
                                             <AiOutlineDown className='translate-y-[2px]'/>
@@ -119,7 +115,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
             } 
             <div className='md:flex gap-x-4 items-center hidden'>
                 {
-                    user && user?.accountType!="Instructor" && (
+                    user && user?.accountType!=="Instructor" && (
                         <div className='flex gap-8 items-center relative'>
                             <Link to="/dashboard/cart" className='relative'>
                                 <AiOutlineShoppingCart fill='white' size={25}  className='cursor-pointer'/>
@@ -131,7 +127,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                                 }
                             </Link>
                             <div ref={profileRef} className='flex gap-1 items-center cursor-pointer relative' onClick={()=>{setProfileDropDown((prev)=>!prev)}}>
-                                <img src={`${user.image}`} className='w-[30px] h-[30px] rounded-full' ></img>
+                                <img src={`${user.image}`} alt='hello' className='w-[30px] h-[30px] rounded-full' ></img>
                                 <AiOutlineDown fill='white' className='translate-y-[3px]'/>
                                 {
                                     <ProfileDropDown profileRef={profileRef} setProfileDropDown={setProfileDropDown} profileDropDown={profileDropDown}/>
@@ -140,6 +136,22 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
 
                         </div>
                         
+                    )
+                }
+                {
+                    user && user?.accountType==="Instructor" &&
+                    (
+                        <div className='flex gap-8 items-center relative'>
+                            
+                            <div ref={profileRef} className='flex gap-1 items-center cursor-pointer relative' onClick={()=>{setProfileDropDown((prev)=>!prev)}}>
+                                <img src={`${user.image}`} alt='hello' className='w-[30px] h-[30px] rounded-full' ></img>
+                                <AiOutlineDown fill='white' className='translate-y-[3px]'/>
+                                {
+                                    <ProfileDropDown profileRef={profileRef} setProfileDropDown={setProfileDropDown} profileDropDown={profileDropDown}/>
+                                }
+                            </div>
+
+                        </div>
                     )
                 }
                 {

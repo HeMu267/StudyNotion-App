@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route,Routes } from "react-router-dom";
+import { Route,Routes,useNavigate} from "react-router-dom";
 import { Home } from "./pages/Home";
 import { Navbar } from "./components/common/Navbar";
 import { useEffect, useState } from "react";
@@ -12,13 +12,24 @@ import { About } from "./pages/About";
 import { OpenRoute } from "./components/core/Auth/OpenRoute";
 import PrivateRoute from "./components/core/Auth/PrivateRoute"
 import { Dashboard } from "./pages/Dashboard";
+import { useDispatch, useSelector } from "react-redux";
+import EnrolledCourses from './components/core/dashboard/EnrolledCourses'
 import MyProfile from "./components/core/dashboard/MyProfile";
 import Error from "./pages/Error";
 import Settings from "./components/core/dashboard/settings";
 import Contact from "./pages/Contact";
+import Cart from "./components/core/dashboard/cart";
+import { ACCOUNT_TYPE } from "./utils/constants";
+import AddCourse from "./components/core/dashboard/AddCourse";
+
 function App() {
+  console.log("App is re rendering");
   const [hamburgerIcons,setHamburgerIcons]=useState(false);
   const [menuPos,setMenuPos]=useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const { user } = useSelector((state) => state.profile)
   useEffect(()=>{
     if(hamburgerIcons && menuPos)
     {
@@ -94,7 +105,22 @@ function App() {
           >
             <Route path="dashboard/my-profile" element={<MyProfile />} />
             <Route path="dashboard/Settings" element={<Settings />} />
-            
+            {
+            user?.accountType === ACCOUNT_TYPE.STUDENT && (
+              <>
+              <Route path="dashboard/cart" element={<Cart />} />
+              <Route path="dashboard/enrolled-courses" element={<EnrolledCourses />} />
+              </>
+            )
+            }
+            {
+              user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+                <>
+                <Route path="dashboard/add-course" element={<AddCourse />} />
+                
+                </>
+              )
+            }
             
         </Route>
         <Route path="*" element={<Error/>} />

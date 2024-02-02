@@ -97,9 +97,10 @@ export function updateProfile(token,refreshToken,formData) {
   }
 }
 
-export async function changePassword(token,refreshToken,formData) {
-  const toastId = toast.loading("Loading...")
-  try {
+export function changePassword(token,refreshToken,formData) {
+  return async (dispatch)=>{
+    const toastId = toast.loading("Loading...")
+    try {
     console.log(formData);
     const response = await apiConnector("POST", CHANGE_PASSWORD_API, formData, {
       Authorization: `Bearer ${token}`,
@@ -115,20 +116,21 @@ export async function changePassword(token,refreshToken,formData) {
       if(error.response.data.message==='token expired')
         {
           try{
-            const newToken=await RefreshToken(refreshToken);
-            (changePassword(newToken,refreshToken,formData));
+            const newToken=await dispatch(RefreshToken(refreshToken));
+            dispatch(changePassword(newToken,refreshToken,formData));
           }catch(err)
           {
             console.log(err);
-            toast.error("refresh err");
+            toast.error("refresh error logout and login again");
           }
       }
       else{
         console.log("CHANGE_PASSWORD_API API ERROR............", error)
         toast.error(error.response.data.message)
-      }
+      } 
   }
   toast.dismiss(toastId)
+  }
 }
 
 export function deleteProfile(token,refreshToken,navigate) {

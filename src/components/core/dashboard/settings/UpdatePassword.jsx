@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
-import { useSelector } from "react-redux"
+import { useDispatch,useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 
 import { changePassword } from "../../../../services/operations/SettingsAPI"
 import IconBtn from "../../../common/IconBtn"
 
 export default function UpdatePassword() {
+  const dispatch=useDispatch();
   const { token ,refreshToken} = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
@@ -20,10 +21,10 @@ export default function UpdatePassword() {
     formState: { errors },
   } = useForm()
 
-  const submitPasswordForm = async (data) => {
+  const submitPasswordForm = (data) => {
     // console.log("password Data - ", data)
     try {
-      await changePassword(token,refreshToken,data)
+      dispatch(changePassword(token,refreshToken,data))
     } catch (error) {
       console.log("ERROR MESSAGE - ", error.message)
     }
