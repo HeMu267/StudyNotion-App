@@ -141,7 +141,7 @@ exports.refreshToken=async(req,res)=>{
             role:user.accountType
         }
         const token=jwt.sign(payload,process.env.JWT_SECRET,{
-            expiresIn:"24h"
+            expiresIn:"1d"
         });
         user.token=token;
         user.refreshToken=refreshToken;
@@ -187,10 +187,10 @@ exports.login=async(req,res)=>{
             const payload={
                 email:user.email,
                 id:user._id,
-                role:user.accountType
+                accountType:user.accountType
             }
             const token=jwt.sign(payload,process.env.JWT_SECRET,{
-                expiresIn:"24h"
+                expiresIn:"1d"
             });
             const payload1={
                 id:user._id

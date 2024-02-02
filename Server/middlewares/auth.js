@@ -13,6 +13,7 @@ exports.auth=(req,res,next)=>{
         try{
             const payload=jwt.verify(token,process.env.JWT_SECRET);
             req.user=payload;
+            console.log(payload);
         }
         catch(err)
         {
@@ -63,7 +64,7 @@ exports.IsStudent=(req,res,next)=>{
 };
 exports.IsInstructor=(req,res,next)=>{
     try{
-        if(req.user.accountType!="Instructor")
+        if(req.user.accountType!=="Instructor")
         {
             return res.status(401).json({
                 success:false,
