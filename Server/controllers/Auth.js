@@ -5,7 +5,7 @@ const bcrypt=require("bcrypt");
 const otpGenerator=require("otp-generator");
 const Profile=require("../models/Profile");
 const passwordUpdated=require("../Mails/Templates/passwordUpdate");
-const mailSender=require("../utils/Mailsender");
+const mailSender=require("../utils/MailSender");
 require("dotenv").config();
 exports.sendOTP=async(req,res)=>{
     try{
