@@ -7,7 +7,7 @@ import { logout } from "./authAPI"
 import { RefreshToken } from "../../utils/refreshToken"
 
 
-const { GET_USER_DETAILS_API, GET_USER_ENROLLED_COURSES_API } = profileEndpoints
+  const { GET_USER_DETAILS_API, GET_USER_ENROLLED_COURSES_API, GET_INSTRUCTOR_DATA_API} = profileEndpoints
 export function getUserDetails(token, navigate) {
   return async (dispatch) => {
     const toastId = toast.loading("Loading...")
@@ -35,53 +35,48 @@ export function getUserDetails(token, navigate) {
   }
 }
 
-export function getUserEnrolledCourses(token,refreshToken) {
-return async(dispatch)=>{
-        const toastId = toast.loading("Loading...")
-        let result = [];
-    try {
-        console.log("BEFORE Calling BACKEND API FOR ENROLLED COURSES");
-        const response = await apiConnector(
-        "GET",
-        GET_USER_ENROLLED_COURSES_API,
-        null,
-        {
-            Authorization: `Bearer ${token}`,
-        }
-        )
-        console.log("AFTER Calling BACKEND API FOR ENROLLED COURSES");
-        // console.log(
-        //   "GET_USER_ENROLLED_COURSES_API API RESPONSE............",
-        //   response
-        // )
-        console.log(response);
-        if (!response.data.success) {
-        throw new Error(response.data.message)
-        }
-        result = response.data.data;
-        toast.dismiss(toastId);
-        return result;
-    } catch (error) {
-    console.log(error);
-    console.log(error.response.data.message);
-    if(error.response.data.message==='token expired')
-        {
-          try{
-            const newToken=await dispatch(RefreshToken(refreshToken));
-            const resultagain=dispatch(getUserEnrolledCourses(newToken,refreshToken));
-            toast.dismiss(toastId);
-            return resultagain;
-          }catch(err)
-          {
-            console.log(err);
-            toast.error("refresh err");
-          }
+export async function getUserEnrolledCourses(token) {
+  const toastId = toast.loading("Loading...")
+  let result = []
+  try {
+    const response = await apiConnector(
+      "GET",
+      GET_USER_ENROLLED_COURSES_API,
+      null,
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    )
+    // console.log(
+    //   "GET_USER_ENROLLED_COURSES_API API RESPONSE............",
+    //   response
+    // )
+
+    if (!response.data.success) {
+      throw new Error(response.data.message)
     }
-    else{
-        console.log("GET_USER_ENROLLED_COURSES_API API ERROR............", error)
-        toast.error("Could Not Get Enrolled Courses")
-        }
-    }
-    toast.dismiss(toastId);
-    }
+    result = response.data.data
+  } catch (error) {
+    console.log("GET_USER_ENROLLED_COURSES_API API ERROR............", error)
+    toast.error("Could Not Get Enrolled Courses")
+  }
+  toast.dismiss(toastId)
+  return result
+}
+
+export async function getInstructorData(token) {
+  const toastId = toast.loading("Loading...")
+  let result = []
+  try {
+    const response = await apiConnector("GET", GET_INSTRUCTOR_DATA_API, null, {
+      Authorization: `Bearer ${token}`,
+    })
+    console.log("GET_INSTRUCTOR_DATA_API API RESPONSE............", response)
+    result = response?.data?.courses
+  } catch (error) {
+    console.log("GET_INSTRUCTOR_DATA_API API ERROR............", error)
+    toast.error("Could Not Get Instructor Data")
+  }
+  toast.dismiss(toastId)
+  return result
 }
