@@ -25,7 +25,7 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
             try{
                 const result=await apiConnector("GET",categories.CATEGORIES_API);
                 console.log(result);
-                setSubLinks(result.data.allCategories)
+                setSubLinks(result.data.data)
             }catch(err){
                 console.log(err);
                 console.log("Could not fetch category list")
@@ -85,7 +85,12 @@ export const Navbar = ({hamburgerIcons,setHamburgerIcons,menuPos,setMenuPos}) =>
                                                 {
                                                     subLinks.map((elem,index)=>{
                                                         return(
-                                                            <Link to={elem.link}>
+                                                            <Link 
+                                                                to={`/catalog/${elem.name
+                                                                .split(" ")
+                                                                .join("-")
+                                                                .toLowerCase()}`}
+                                                            >
                                                                 <div key={index} className='text-lg px-5 py-3 hover:bg-richblack-50 rounded-md'>
                                                                     {elem.name}
                                                                 </div>
