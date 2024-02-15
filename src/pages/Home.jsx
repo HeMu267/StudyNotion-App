@@ -11,6 +11,7 @@ import { LearningLTimeline } from '../components/core/Homepage/LearningLTimeline
 import { InstructorSection } from '../components/core/Homepage/InstructorSection'
 import { ExploreMore } from '../components/core/Homepage/ExploreMore'
 import Footer from '../components/common/Footer'
+import ReviewSlider from '../components/common/ReviewSlider'
 export const Home = () => {
   return (
     <div>
@@ -150,6 +151,10 @@ export const Home = () => {
         </div>
         <div className='flex flex-col mx-auto w-11/12 sm:w-10/12 mb-10 text-white max-w-maxContent items-center'>
             <InstructorSection/>
+                <h1 className="text-center text-4xl font-semibold mt-8">
+                Reviews from other learners
+                </h1>
+             <ReviewSlider />
         </div>
         <Footer/>
     </div>

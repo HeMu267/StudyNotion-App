@@ -5,7 +5,7 @@ import { getUserEnrolledCourses } from '../../../services/operations/profileAPI'
 import ProgressBar from '@ramonak/react-progress-bar';
 
 const EnrolledCourses = () => {
-    const dispatch=useDispatch();
+  const dispatch=useDispatch();
   const navigate = useNavigate()
 
     const {token,refreshToken}  = useSelector((state) => state.auth);
@@ -15,7 +15,7 @@ const EnrolledCourses = () => {
 
     const getEnrolledCourses = async() => {
         try{
-            const response =await dispatch(getUserEnrolledCourses(token,refreshToken));
+            const response =await getUserEnrolledCourses(token);
             console.log(response);
             setEnrolledCourses(response);
         }
