@@ -3,9 +3,9 @@ const Course=require("../models/Course");
 exports.createRating=async(req,res)=>{
     try{
         const userID=req.user.id;
-        const {rating,review,courseID}=req.body;
+        const {rating,review,courseId}=req.body;
         const courseDetails=await Course.findOne({
-            _id:courseID,
+            _id:courseId,
             studentsEnrolled:{$elemMatch:{
                 $eq:userID 
             }}
@@ -18,7 +18,7 @@ exports.createRating=async(req,res)=>{
         }
         const alreadyReviewed=await RatingAndReview.findOne({
             user:userID,
-            course:courseID
+            course:courseId
         });
         if(alreadyReviewed)
         {
@@ -28,10 +28,10 @@ exports.createRating=async(req,res)=>{
             });
         }
         const ratingReview=await RatingAndReview.create({
-            rating,review,course:courseID,
+            rating,review,course:courseId,
             user:userID
         })
-        const updatedCourse=await Course.findByIdAndUpdate(courseID,{
+        const updatedCourse=await Course.findByIdAndUpdate(courseId,{
                 $push:{ratingAndReviews:ratingReview._id}
         },{new:true}
         )
@@ -52,7 +52,7 @@ exports.createRating=async(req,res)=>{
 }
 exports.getAverageRating=async(res,req)=>{
     try{
-        const courseID=req.body.courseID;
+        const courseID=req.body.courseId;
         const result=await RatingAndReview.aggregate([
             {
                 $match:{
