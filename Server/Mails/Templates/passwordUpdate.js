@@ -1,4 +1,4 @@
-const passwordUpdated = (email) => {
+exports.passwordUpdated = (email) => {
 	return `<!DOCTYPE html>
     <html>
     
@@ -55,7 +55,7 @@ const passwordUpdated = (email) => {
     
     <body>
         <div class="container">
-            <a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
+            <a href=""><img class="logo"
                     src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
             <div class="message">Password Update Confirmation</div>
             <div class="body">
@@ -73,4 +73,3 @@ const passwordUpdated = (email) => {
     
     </html>`;
 };
-module.exports=passwordUpdated;
